@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { StatusBadge } from '../components/StatusBadge';
 import { MetricCard } from '../components/MetricCard';
@@ -8,6 +8,7 @@ import { GitBranch, FileCode, Settings, FolderGit2 } from 'lucide-react';
 
 export function RepositoriesPage() {
   const { projectId } = useParams();
+  const navigate = useNavigate();
   const project = loadProjectMetadata();
   const reposData = loadRepos();
 
@@ -119,7 +120,10 @@ export function RepositoriesPage() {
         </div>
 
         <div className="flex justify-end">
-          <button className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 transition-colors">
+          <button
+            onClick={() => navigate(`/projects/${projectId}/stage1`)}
+            className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white hover:bg-blue-700 transition-colors"
+          >
             Proceed to Inventory →
           </button>
         </div>
