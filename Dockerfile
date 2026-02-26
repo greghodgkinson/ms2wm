@@ -20,6 +20,9 @@ ARG VITE_SUPABASE_ANON_KEY
 ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
 ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
 
+# Debug: Show that variables are set
+RUN echo "Building with VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:0:30}..."
+
 # Build the application
 RUN npm run build
 

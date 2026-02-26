@@ -7,9 +7,14 @@ PORT=3000
 
 echo "Loading environment variables..."
 if [ -f .env ]; then
-    export $(cat .env | grep -v '^#' | xargs)
+    set -a
+    source .env
+    set +a
+    echo "Loaded VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:0:30}..."
+    echo "Loaded VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:0:30}..."
 else
-    echo "Warning: .env file not found"
+    echo "Error: .env file not found"
+    exit 1
 fi
 
 echo "Building Docker image..."
