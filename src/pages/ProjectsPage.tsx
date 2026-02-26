@@ -6,14 +6,12 @@ import { formatDate } from '../lib/utils';
 import { FolderGit2, Plus } from 'lucide-react';
 import { loadProjectMetadata } from '../lib/dataLoader';
 
-export function ProjectsPage() {
-  console.log('ProjectsPage rendering...');
+export default function ProjectsPage() {
   const navigate = useNavigate();
 
   let project;
   try {
     project = loadProjectMetadata();
-    console.log('Project data:', project);
   } catch (error) {
     console.error('Error loading project metadata:', error);
     return <div style={{ padding: '20px' }}>Error loading project data: {String(error)}</div>;
