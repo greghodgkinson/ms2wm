@@ -5,15 +5,21 @@ IMAGE_NAME="migration-tracker"
 CONTAINER_NAME="migration-tracker-app"
 PORT=3000
 
+# Get the directory where this script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$SCRIPT_DIR"
+
+echo "Working directory: $SCRIPT_DIR"
 echo "Loading environment variables..."
-if [ -f .env ]; then
+
+if [ -f "$SCRIPT_DIR/.env" ]; then
     set -a
-    source .env
+    source "$SCRIPT_DIR/.env"
     set +a
     echo "Loaded VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:0:30}..."
     echo "Loaded VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:0:30}..."
 else
-    echo "Error: .env file not found"
+    echo "Error: .env file not found at $SCRIPT_DIR/.env"
     exit 1
 fi
 
