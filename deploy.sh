@@ -10,24 +10,15 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
 echo "Working directory: $SCRIPT_DIR"
-echo "Loading environment variables..."
 
-if [ -f "$SCRIPT_DIR/.env" ]; then
-    set -a
-    source "$SCRIPT_DIR/.env"
-    set +a
-    echo "Loaded VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:0:30}..."
-    echo "Loaded VITE_SUPABASE_ANON_KEY: ${VITE_SUPABASE_ANON_KEY:0:30}..."
-else
+# Check .env exists
+if [ ! -f "$SCRIPT_DIR/.env" ]; then
     echo "Error: .env file not found at $SCRIPT_DIR/.env"
     exit 1
 fi
 
-echo "Building Docker image..."
-docker build \
-    --build-arg VITE_SUPABASE_URL="$VITE_SUPABASE_URL" \
-    --build-arg VITE_SUPABASE_ANON_KEY="$VITE_SUPABASE_ANON_KEY" \
-    -t $IMAGE_NAME .
+echo "Building Docker image (environment variables will be read from .env during build)..."
+docker build -t $IMAGE_NAME .
 
 if [ $? -ne 0 ]; then
     echo "Error: Docker build failed"

@@ -12,18 +12,7 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build arguments for environment variables
-ARG VITE_SUPABASE_URL
-ARG VITE_SUPABASE_ANON_KEY
-
-# Export as environment variables for Vite build
-ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
-ENV VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY
-
-# Debug: Show that variables are set
-RUN echo "Building with VITE_SUPABASE_URL: ${VITE_SUPABASE_URL:0:30}..."
-
-# Build the application
+# Build the application (will use .env file)
 RUN npm run build
 
 # Production stage
