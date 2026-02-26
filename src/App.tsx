@@ -10,21 +10,27 @@ import { Stage5CutoverPage } from './pages/Stage5CutoverPage';
 import { EnvironmentsPage } from './pages/EnvironmentsPage';
 
 function App() {
+  console.log('App rendering...');
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<ProjectsPage />} />
-        <Route path="/projects/:projectId" element={<ProjectDashboard />} />
-        <Route path="/projects/:projectId/repositories" element={<RepositoriesPage />} />
-        <Route path="/projects/:projectId/stage1" element={<Stage1InventoryPage />} />
-        <Route path="/projects/:projectId/stage2" element={<Stage2ArchitecturePage />} />
-        <Route path="/projects/:projectId/stage3" element={<Stage3ManifestPage />} />
-        <Route path="/projects/:projectId/stage4" element={<Stage4RuntimePage />} />
-        <Route path="/projects/:projectId/stage5" element={<Stage5CutoverPage />} />
-        <Route path="/projects/:projectId/environments" element={<EnvironmentsPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <div style={{ padding: '20px', background: '#f0f0f0', minHeight: '100vh', fontFamily: 'sans-serif' }}>
+      <h1 style={{ color: '#333' }}>MS2WM Migration Dashboard</h1>
+      <p style={{ color: '#666' }}>Loading application...</p>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<ProjectsPage />} />
+          <Route path="/projects/:projectId" element={<ProjectDashboard />} />
+          <Route path="/projects/:projectId/repositories" element={<RepositoriesPage />} />
+          <Route path="/projects/:projectId/stage1" element={<Stage1InventoryPage />} />
+          <Route path="/projects/:projectId/stage2" element={<Stage2ArchitecturePage />} />
+          <Route path="/projects/:projectId/stage3" element={<Stage3ManifestPage />} />
+          <Route path="/projects/:projectId/stage4" element={<Stage4RuntimePage />} />
+          <Route path="/projects/:projectId/stage5" element={<Stage5CutoverPage />} />
+          <Route path="/projects/:projectId/environments" element={<EnvironmentsPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
