@@ -1,35 +1,28 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { ProjectDashboard } from './pages/ProjectDashboard';
-import { RepositoriesPage } from './pages/RepositoriesPage';
-import { Stage1InventoryPage } from './pages/Stage1InventoryPage';
-import { Stage2ArchitecturePage } from './pages/Stage2ArchitecturePage';
-import { Stage3ManifestPage } from './pages/Stage3ManifestPage';
-import { Stage4RuntimePage } from './pages/Stage4RuntimePage';
-import { Stage5CutoverPage } from './pages/Stage5CutoverPage';
-import { EnvironmentsPage } from './pages/EnvironmentsPage';
-
 function App() {
-  console.log('App rendering...');
-
   return (
-    <div style={{ padding: '20px', background: '#f0f0f0', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-      <h1 style={{ color: '#333' }}>MS2WM Migration Dashboard</h1>
-      <p style={{ color: '#666' }}>Loading application...</p>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<ProjectsPage />} />
-          <Route path="/projects/:projectId" element={<ProjectDashboard />} />
-          <Route path="/projects/:projectId/repositories" element={<RepositoriesPage />} />
-          <Route path="/projects/:projectId/stage1" element={<Stage1InventoryPage />} />
-          <Route path="/projects/:projectId/stage2" element={<Stage2ArchitecturePage />} />
-          <Route path="/projects/:projectId/stage3" element={<Stage3ManifestPage />} />
-          <Route path="/projects/:projectId/stage4" element={<Stage4RuntimePage />} />
-          <Route path="/projects/:projectId/stage5" element={<Stage5CutoverPage />} />
-          <Route path="/projects/:projectId/environments" element={<EnvironmentsPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+    <div style={{
+      padding: '40px',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      minHeight: '100vh',
+      color: 'white',
+      fontFamily: 'system-ui, sans-serif'
+    }}>
+      <h1 style={{ fontSize: '48px', marginBottom: '20px' }}>
+        MS2WM Migration Dashboard
+      </h1>
+      <p style={{ fontSize: '24px', opacity: 0.9 }}>
+        System is loading...
+      </p>
+      <div style={{
+        marginTop: '40px',
+        padding: '30px',
+        background: 'rgba(255,255,255,0.2)',
+        borderRadius: '12px'
+      }}>
+        <p style={{ fontSize: '18px' }}>
+          If you can see this, React is working correctly.
+        </p>
+      </div>
     </div>
   );
 }
