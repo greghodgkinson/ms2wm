@@ -1,42 +1,36 @@
 {
   "repositories": [
     {
-      "id": "repo-001",
-      "name": "hotel-reservation-api",
-      "url": "https://github.com/acme-corp/hotel-reservation-api.git",
+      "id": "repo-2106",
+      "name": "mule2wm",
+      "url": "https://gitlab.prolifics.com/innovation-center/prolifics-code-profiler-and-transformer/mule2wm.git",
       "branch": "main",
       "analysis_status": "analyzed",
-      "last_scanned": "2026-02-20T08:30:00Z",
+      "last_scanned": "2026-02-26T19:07:00Z",
+      "last_commit": "be232e45",
+      "last_commit_message": "Ready for demo",
+      "last_commit_author": "Gregory Hodgkinson",
+      "last_commit_time": "3 minutes ago",
       "metrics": {
-        "total_files": 156,
-        "mule_flows": 12,
-        "config_files": 8
-      }
-    },
-    {
-      "id": "repo-002",
-      "name": "hotel-guest-services",
-      "url": "https://github.com/acme-corp/hotel-guest-services.git",
-      "branch": "develop",
-      "analysis_status": "analyzed",
-      "last_scanned": "2026-02-20T08:35:00Z",
-      "metrics": {
-        "total_files": 98,
-        "mule_flows": 8,
-        "config_files": 5
-      }
-    },
-    {
-      "id": "repo-003",
-      "name": "hotel-payment-integration",
-      "url": "https://github.com/acme-corp/hotel-payment-integration.git",
-      "branch": "main",
-      "analysis_status": "analyzed",
-      "last_scanned": "2026-02-20T08:40:00Z",
-      "metrics": {
-        "total_files": 72,
-        "mule_flows": 6,
-        "config_files": 4
+        "total_files": 522,
+        "total_size_kb": 522,
+        "mule_flows": 1,
+        "config_files": 1,
+        "commits": 4,
+        "branches": 1,
+        "tags": 0
+      },
+      "structure": {
+        "archived": ["demo_output"],
+        "demo_output": [],
+        "sample_mule_project": {
+          "src/main/mule": ["hotel-api.xml"],
+          "src/main/resources/api": ["hotel-api.raml"],
+          "src/main/resources/dwl": ["hotel-transform.dwl"],
+          "": ["config.properties"]
+        },
+        "src": [],
+        "test": []
       }
     }
   ]
