@@ -30,25 +30,25 @@ export function Stage1InventoryPage() {
         <div className="grid gap-6 md:grid-cols-4">
           <MetricCard
             title="Total Flows"
-            value={inventory.summary.totalFlows}
+            value={inventory.total_flows}
             icon={FileText}
             color="blue"
           />
           <MetricCard
             title="Subflows"
-            value={inventory.summary.totalSubflows}
+            value={inventory.total_subflows}
             icon={Code}
             color="green"
           />
           <MetricCard
             title="Connectors"
-            value={inventory.summary.totalConnectors}
+            value={inventory.connectors.length}
             icon={Database}
             color="yellow"
           />
           <MetricCard
             title="API Endpoints"
-            value={inventory.summary.totalEndpoints}
+            value={inventory.raml_endpoints.length}
             icon={Link}
             color="gray"
           />
@@ -57,56 +57,55 @@ export function Stage1InventoryPage() {
         <div className="space-y-6">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Mule Flows ({inventory.flowsData.length})
+              Mule Flows ({inventory.flows.length})
             </h3>
             <div className="space-y-3">
-              {inventory.flowsData.map((flow) => (
+              {inventory.flows.map((flow) => (
                 <div
-                  key={flow.flowName}
+                  key={flow.name}
                   className="rounded-lg border border-gray-200 bg-white overflow-hidden"
                 >
                   <div
                     onClick={() =>
-                      setExpandedFlow(expandedFlow === flow.flowName ? null : flow.flowName)
+                      setExpandedFlow(expandedFlow === flow.name ? null : flow.name)
                     }
                     className="flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex items-center gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3">
-                          <h4 className="font-semibold text-gray-900">{flow.flowName}</h4>
+                          <h4 className="font-semibold text-gray-900">{flow.name}</h4>
                           <StatusBadge status={flow.type} size="sm" />
-                          <StatusBadge status={flow.complexity} size="sm" />
+                          <StatusBadge status={flow.dataweave_complexity} size="sm" />
                         </div>
                         <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
                           <span>{flow.trigger}</span>
-                          {flow.httpMethod && <span className="font-medium">{flow.httpMethod}</span>}
-                          {flow.path && <span className="text-blue-600">{flow.path}</span>}
-                          <span>{flow.processors} processors</span>
+                          {flow.http_method && <span className="font-medium">{flow.http_method}</span>}
+                          {flow.http_path && <span className="text-blue-600">{flow.http_path}</span>}
+                          <span>{flow.step_count} steps</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {expandedFlow === flow.flowName && flow.details && (
+                  {expandedFlow === flow.name && (
                     <div className="border-t border-gray-200 bg-gray-50 p-4 space-y-3">
-                      <p className="text-sm text-gray-700">{flow.details.description}</p>
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
                           <p className="text-gray-600 font-medium">Connectors</p>
                           <div className="mt-1 space-y-1">
-                            {flow.details.connectors?.map((conn: string) => (
+                            {flow.connectors.length > 0 ? flow.connectors.map((conn: string) => (
                               <p key={conn} className="text-gray-900">{conn}</p>
-                            ))}
+                            )) : <p className="text-gray-500">None</p>}
                           </div>
                         </div>
                         <div>
                           <p className="text-gray-600 font-medium">Transformations</p>
-                          <p className="text-gray-900 mt-1">{flow.details.transformations}</p>
+                          <p className="text-gray-900 mt-1">{flow.dataweave_transforms.length}</p>
                         </div>
                         <div>
                           <p className="text-gray-600 font-medium">Error Handlers</p>
-                          <p className="text-gray-900 mt-1">{flow.details.errorHandlers}</p>
+                          <p className="text-gray-900 mt-1">{flow.error_handlers.length}</p>
                         </div>
                       </div>
                     </div>
@@ -118,10 +117,10 @@ export function Stage1InventoryPage() {
 
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Database Connectors ({inventory.connectorsData.length})
+              Database Connectors ({inventory.connectors.length})
             </h3>
             <div className="grid gap-4 md:grid-cols-2">
-              {inventory.connectorsData.map((connector) => (
+              {inventory.connectors.map((connector) => (
                 <div
                   key={connector.name}
                   className="rounded-lg border border-gray-200 bg-white p-4"
@@ -137,12 +136,12 @@ export function Stage1InventoryPage() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Connection:</span>
-                      <span className="font-medium text-gray-900">{connector.connectionType}</span>
+                      <span className="font-medium text-gray-900">{connector.connection_type}</span>
                     </div>
-                    {connector.config.host && (
+                    {connector.details['listener-connection.host'] && (
                       <div className="flex justify-between">
                         <span className="text-gray-600">Host:</span>
-                        <span className="font-medium text-gray-900">{connector.config.host}</span>
+                        <span className="font-medium text-gray-900">{connector.details['listener-connection.host']}</span>
                       </div>
                     )}
                   </div>
@@ -153,10 +152,10 @@ export function Stage1InventoryPage() {
 
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              API Endpoints ({inventory.ramlEndpoints.length})
+              API Endpoints ({inventory.raml_endpoints.length})
             </h3>
             <div className="space-y-2">
-              {inventory.ramlEndpoints.map((endpoint, idx) => (
+              {inventory.raml_endpoints.map((endpoint, idx) => (
                 <div
                   key={idx}
                   className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-3"
@@ -167,7 +166,7 @@ export function Stage1InventoryPage() {
                     </span>
                     <span className="font-mono text-sm text-gray-900">{endpoint.path}</span>
                   </div>
-                  <span className="text-sm text-gray-600">{endpoint.description}</span>
+                  <span className="text-sm text-gray-600">{endpoint.display_name}</span>
                 </div>
               ))}
             </div>

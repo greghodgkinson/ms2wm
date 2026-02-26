@@ -1,657 +1,794 @@
 {
-  "summary": {
-    "totalFlows": 26,
-    "totalSubflows": 14,
-    "totalConnectors": 8,
-    "totalEndpoints": 18
+  "project_name": "hotel-sys-api",
+  "is_multi_project": false,
+  "total_flows": 6,
+  "total_subflows": 3,
+  "connector_types": [
+    "http:listener-config",
+    "apikit:config",
+    "db:config"
+  ],
+  "api_layers": {
+    "system": [
+      "hotel-api-main",
+      "hotel-api-console",
+      "get:\\hotels\\search:hotel-api-config",
+      "get:\\hotels\\(id):hotel-api-config",
+      "post:\\hotels\\(id)\\book:hotel-api-config",
+      "get:\\health:hotel-api-config"
+    ]
   },
-  "flowsData": [
+  "flows": [
     {
-      "flowName": "create-reservation-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "POST",
-      "path": "/api/reservations",
-      "processors": 12,
-      "complexity": "high",
+      "name": "hotel-api-main",
+      "type": "flow",
+      "trigger": "http-listener",
+      "http_method": "",
+      "http_path": "/api/*",
+      "api_layer": "system",
+      "step_count": 15,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [],
+      "subflow_refs": [],
+      "called_by": [],
+      "call_count": 0,
+      "sql_queries": [],
+      "http_urls": [],
+      "dataweave_complexity": "simple",
+      "is_boilerplate": true,
+      "error_handlers": [
+        {
+          "type": "on-error-propagate",
+          "error_type": "APIKIT:BAD_REQUEST",
+          "status_code": ""
+        },
+        {
+          "type": "on-error-propagate",
+          "error_type": "APIKIT:NOT_FOUND",
+          "status_code": ""
+        },
+        {
+          "type": "on-error-propagate",
+          "error_type": "APIKIT:METHOD_NOT_ALLOWED",
+          "status_code": ""
+        }
+      ],
+      "dataweave_transforms": [
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Bad request\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Bad request\"}\n%dw 2.0\noutput application/json\n---\n{message: \"Bad request\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Bad request\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Resource not found\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Resource not found\"}\n%dw 2.0\noutput application/json\n---\n{message: \"Resource not found\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Resource not found\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Method not allowed\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Method not allowed\"}\n%dw 2.0\noutput application/json\n---\n{message: \"Method not allowed\"}",
+          "output_fields": [
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Method not allowed\"}",
+          "output_fields": [
+            "message"
+          ]
+        }
+      ],
+      "set_variables": {},
+      "processors": [
+        {
+          "type": "http:listener",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "apikit:router",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:error-handler",
+          "name": "",
+          "content": "%dw 2.0\noutput application/json\n---\n{message: \"Bad request\"}\n%dw 2.0\noutput application/json\n---\n{message: \"Resource not found\"}\n%dw 2.0\noutput application/json\n---\n{message: \"Method not allowed\"}"
+        }
+      ]
+    },
+    {
+      "name": "hotel-api-console",
+      "type": "flow",
+      "trigger": "http-listener",
+      "http_method": "",
+      "http_path": "/console/*",
+      "api_layer": "system",
+      "step_count": 2,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [],
+      "subflow_refs": [],
+      "called_by": [],
+      "call_count": 0,
+      "sql_queries": [],
+      "http_urls": [],
+      "dataweave_complexity": "none",
+      "is_boilerplate": true,
+      "error_handlers": [],
+      "dataweave_transforms": [],
+      "set_variables": {},
+      "processors": [
+        {
+          "type": "http:listener",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "apikit:console",
+          "name": "",
+          "content": ""
+        }
+      ]
+    },
+    {
+      "name": "get:\\hotels\\search:hotel-api-config",
+      "type": "flow",
+      "trigger": "http-listener",
+      "http_method": "GET",
+      "http_path": "/hotels/search",
+      "api_layer": "system",
+      "step_count": 16,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [],
+      "subflow_refs": [
+        "validate-request",
+        "database_select"
+      ],
+      "called_by": [],
+      "call_count": 0,
+      "sql_queries": [],
+      "http_urls": [],
+      "dataweave_complexity": "moderate",
+      "is_boilerplate": false,
+      "error_handlers": [
+        {
+          "type": "on-error-propagate",
+          "error_type": "HTTP:BAD_REQUEST",
+          "status_code": "400"
+        },
+        {
+          "type": "on-error-propagate",
+          "error_type": "ANY",
+          "status_code": "500"
+        }
+      ],
+      "dataweave_transforms": [
+        {
+          "content": "%dw 2.0\noutput application/json\n---\npayload map (hotel) -> {\n    hotelId: hotel.hotel_id,\n    name: hotel.name,\n    distanceMeters: hotel.distance_meters,\n    fromPrice: hotel.from_price,\n    currency: hotel.currency\n}",
+          "output_fields": [
+            "hotelId",
+            "name",
+            "distanceMeters",
+            "fromPrice",
+            "currency"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\npayload map (hotel) -> {\n    hotelId: hotel.hotel_id,\n    name: hotel.name,\n    distanceMeters: hotel.distance_meters,\n    fromPrice: hotel.from_price,\n    currency: hotel.currency\n}\n%dw 2.0\noutput application/json\n---\npayload map (hotel) -> {\n    hotelId: hotel.hotel_id,\n    name: hotel.name,\n    distanceMeters: hotel.distance_meters,\n    fromPrice: hotel.from_price,\n    currency: hotel.currency\n}",
+          "output_fields": [
+            "hotelId",
+            "name",
+            "distanceMeters",
+            "fromPrice",
+            "currency"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\npayload map (hotel) -> {\n    hotelId: hotel.hotel_id,\n    name: hotel.name,\n    distanceMeters: hotel.distance_meters,\n    fromPrice: hotel.from_price,\n    currency: hotel.currency\n}",
+          "output_fields": [
+            "hotelId",
+            "name",
+            "distanceMeters",
+            "fromPrice",
+            "currency"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{statusCode: 400, message: \"Bad request\"}",
+          "output_fields": [
+            "statusCode",
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{statusCode: 400, message: \"Bad request\"}\n%dw 2.0\noutput application/json\n---\n{statusCode: 400, message: \"Bad request\"}",
+          "output_fields": [
+            "statusCode",
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{statusCode: 400, message: \"Bad request\"}",
+          "output_fields": [
+            "statusCode",
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{statusCode: 500, message: \"Internal server error\"}",
+          "output_fields": [
+            "statusCode",
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{statusCode: 500, message: \"Internal server error\"}\n%dw 2.0\noutput application/json\n---\n{statusCode: 500, message: \"Internal server error\"}",
+          "output_fields": [
+            "statusCode",
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{statusCode: 500, message: \"Internal server error\"}",
+          "output_fields": [
+            "statusCode",
+            "message"
+          ]
+        }
+      ],
+      "set_variables": {
+        "searchQuery": "#[attributes.queryParams.q]"
+      },
+      "processors": [
+        {
+          "type": "http:listener",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:set-variable",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:flow-ref",
+          "name": "validate-request",
+          "content": ""
+        },
+        {
+          "type": "mule:flow-ref",
+          "name": "database_select",
+          "content": ""
+        },
+        {
+          "type": "ee:transform",
+          "name": "Transform Response",
+          "content": "%dw 2.0\noutput application/json\n---\npayload map (hotel) -> {\n    hotelId: hotel.hotel_id,\n    name: hotel.name,\n    distanceMeters: hotel.distance_meters,\n    fromPrice: hotel.from_price,\n    currency"
+        },
+        {
+          "type": "mule:error-handler",
+          "name": "",
+          "content": "%dw 2.0\noutput application/json\n---\n{statusCode: 400, message: \"Bad request\"}\n%dw 2.0\noutput application/json\n---\n{statusCode: 500, message: \"Internal server error\"}"
+        }
+      ]
+    },
+    {
+      "name": "get:\\hotels\\(id):hotel-api-config",
+      "type": "flow",
+      "trigger": "http-listener",
+      "http_method": "GET",
+      "http_path": "/hotels/(id)",
+      "api_layer": "system",
+      "step_count": 8,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [
+        "db:select"
+      ],
+      "subflow_refs": [],
+      "called_by": [],
+      "call_count": 0,
+      "sql_queries": [
+        "SELECT hotel_id, name, description, address, city, distance_meters, from",
+        "SELECT hotel_id, name, description, address, city, distance_meters, from"
+      ],
+      "http_urls": [],
+      "dataweave_complexity": "complex",
+      "is_boilerplate": false,
+      "error_handlers": [],
+      "dataweave_transforms": [
+        {
+          "content": "%dw 2.0\noutput application/json\n---\nif (sizeOf(payload) > 0)\n    {\n        hotelId: payload[0].hotel_id,\n        name: payload[0].name,\n        description: payload[0].description,\n        address: payload[0].address,\n        city: payload[0].city,\n        distanceMeters: payload[0].distance_meters,\n        fromPrice: payload[0].from_price,\n        currency: payload[0].currency,\n        rating: payload[0].rating,\n        amenities: payload[0].amenities\n    }\nelse\n    {statusCode: 404, message: \"",
+          "output_fields": [
+            "hotelId",
+            "name",
+            "description",
+            "address",
+            "city",
+            "distanceMeters",
+            "fromPrice",
+            "currency",
+            "rating",
+            "amenities",
+            "statusCode",
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\nif (sizeOf(payload) > 0)\n    {\n        hotelId: payload[0].hotel_id,\n        name: payload[0].name,\n        description: payload[0].description,\n        address: payload[0].address,\n        city: payload[0].city,\n        distanceMeters: payload[0].distance_meters,\n        fromPrice: payload[0].from_price,\n        currency: payload[0].currency,\n        rating: payload[0].rating,\n        amenities: payload[0].amenities\n    }\nelse\n    {statusCode: 404, message: \"",
+          "output_fields": [
+            "hotelId",
+            "name",
+            "description",
+            "address",
+            "city",
+            "distanceMeters",
+            "fromPrice",
+            "currency",
+            "rating",
+            "amenities",
+            "statusCode",
+            "message"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\nif (sizeOf(payload) > 0)\n    {\n        hotelId: payload[0].hotel_id,\n        name: payload[0].name,\n        description: payload[0].description,\n        address: payload[0].address,\n        city: payload[0].city,\n        distanceMeters: payload[0].distance_meters,\n        fromPrice: payload[0].from_price,\n        currency: payload[0].currency,\n        rating: payload[0].rating,\n        amenities: payload[0].amenities\n    }\nelse\n    {statusCode: 404, message: \"",
+          "output_fields": [
+            "hotelId",
+            "name",
+            "description",
+            "address",
+            "city",
+            "distanceMeters",
+            "fromPrice",
+            "currency",
+            "rating",
+            "amenities",
+            "statusCode",
+            "message"
+          ]
+        }
+      ],
+      "set_variables": {
+        "hotelId": "#[attributes.uriParams.id]"
+      },
+      "processors": [
+        {
+          "type": "http:listener",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:set-variable",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "db:select",
+          "name": "",
+          "content": "SELECT hotel_id, name, description, address, city, distance_meters, from_price, currency, rating, amenities FROM hotels WHERE hotel_id = :hotelId\nSELECT hotel_id, name, description, address, city, dis"
+        },
+        {
+          "type": "ee:transform",
+          "name": "Transform Hotel Detail",
+          "content": "%dw 2.0\noutput application/json\n---\nif (sizeOf(payload) > 0)\n    {\n        hotelId: payload[0].hotel_id,\n        name: payload[0].name,\n        description: payload[0].description,\n        address: pa"
+        }
+      ]
+    },
+    {
+      "name": "post:\\hotels\\(id)\\book:hotel-api-config",
+      "type": "flow",
+      "trigger": "http-listener",
+      "http_method": "POST",
+      "http_path": "/hotels/(id)/book",
+      "api_layer": "system",
+      "step_count": 13,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [
+        "db:insert"
+      ],
+      "subflow_refs": [
+        "validate-request",
+        "send-booking-notification"
+      ],
+      "called_by": [],
+      "call_count": 0,
+      "sql_queries": [
+        "INSERT INTO bookings (hotel_id, guest_name, check_in, check_out, status, created_at) VALUES",
+        "INSERT INTO bookings (hotel_id, guest_name, check_in, check_out, status, created_at) VALUES"
+      ],
+      "http_urls": [],
+      "dataweave_complexity": "moderate",
+      "is_boilerplate": false,
+      "error_handlers": [],
+      "dataweave_transforms": [
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{\n    bookingId: uuid(),\n    hotelId: vars.hotelId,\n    guestName: vars.guestName,\n    checkIn: vars.checkIn,\n    checkOut: vars.checkOut,\n    status: \"CONFIRMED\"\n}",
+          "output_fields": [
+            "bookingId",
+            "hotelId",
+            "guestName",
+            "checkIn",
+            "checkOut",
+            "status"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{\n    bookingId: uuid(),\n    hotelId: vars.hotelId,\n    guestName: vars.guestName,\n    checkIn: vars.checkIn,\n    checkOut: vars.checkOut,\n    status: \"CONFIRMED\"\n}\n%dw 2.0\noutput application/json\n---\n{\n    bookingId: uuid(),\n    hotelId: vars.hotelId,\n    guestName: vars.guestName,\n    checkIn: vars.checkIn,\n    checkOut: vars.checkOut,\n    status: \"CONFIRMED\"\n}",
+          "output_fields": [
+            "bookingId",
+            "hotelId",
+            "guestName",
+            "checkIn",
+            "checkOut",
+            "status"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{\n    bookingId: uuid(),\n    hotelId: vars.hotelId,\n    guestName: vars.guestName,\n    checkIn: vars.checkIn,\n    checkOut: vars.checkOut,\n    status: \"CONFIRMED\"\n}",
+          "output_fields": [
+            "bookingId",
+            "hotelId",
+            "guestName",
+            "checkIn",
+            "checkOut",
+            "status"
+          ]
+        }
+      ],
+      "set_variables": {
+        "hotelId": "#[attributes.uriParams.id]",
+        "guestName": "#[payload.guestName]",
+        "checkIn": "#[payload.checkInDate]",
+        "checkOut": "#[payload.checkOutDate]"
+      },
+      "processors": [
+        {
+          "type": "http:listener",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:set-variable",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:set-variable",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:set-variable",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:set-variable",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "mule:flow-ref",
+          "name": "validate-request",
+          "content": ""
+        },
+        {
+          "type": "db:insert",
+          "name": "",
+          "content": "INSERT INTO bookings (hotel_id, guest_name, check_in, check_out, status, created_at) VALUES (:hotelId, :guestName, :checkIn, :checkOut, 'CONFIRMED', GETDATE())\nINSERT INTO bookings (hotel_id, guest_na"
+        },
+        {
+          "type": "ee:transform",
+          "name": "Booking Confirmation Response",
+          "content": "%dw 2.0\noutput application/json\n---\n{\n    bookingId: uuid(),\n    hotelId: vars.hotelId,\n    guestName: vars.guestName,\n    checkIn: vars.checkIn,\n    checkOut: vars.checkOut,\n    status: \"CONFIRMED\"\n}"
+        },
+        {
+          "type": "mule:flow-ref",
+          "name": "send-booking-notification",
+          "content": ""
+        }
+      ]
+    },
+    {
+      "name": "get:\\health:hotel-api-config",
+      "type": "flow",
+      "trigger": "http-listener",
+      "http_method": "GET",
+      "http_path": "/health",
+      "api_layer": "system",
+      "step_count": 4,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [],
+      "subflow_refs": [],
+      "called_by": [],
+      "call_count": 0,
+      "sql_queries": [],
+      "http_urls": [],
+      "dataweave_complexity": "simple",
+      "is_boilerplate": false,
+      "error_handlers": [],
+      "dataweave_transforms": [
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{status: \"UP\"}",
+          "output_fields": [
+            "status"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{status: \"UP\"}\n%dw 2.0\noutput application/json\n---\n{status: \"UP\"}",
+          "output_fields": [
+            "status"
+          ]
+        },
+        {
+          "content": "%dw 2.0\noutput application/json\n---\n{status: \"UP\"}",
+          "output_fields": [
+            "status"
+          ]
+        }
+      ],
+      "set_variables": {},
+      "processors": [
+        {
+          "type": "http:listener",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "ee:transform",
+          "name": "",
+          "content": "%dw 2.0\noutput application/json\n---\n{status: \"UP\"}"
+        }
+      ]
+    },
+    {
+      "name": "validate-request",
+      "type": "sub-flow",
+      "trigger": "none",
+      "http_method": "",
+      "http_path": "",
+      "api_layer": "system",
+      "step_count": 3,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [],
+      "subflow_refs": [],
+      "called_by": [
+        "get:\\hotels\\search:hotel-api-config",
+        "post:\\hotels\\(id)\\book:hotel-api-config"
+      ],
+      "call_count": 2,
+      "sql_queries": [],
+      "http_urls": [],
+      "dataweave_complexity": "none",
+      "is_boilerplate": false,
+      "error_handlers": [],
+      "dataweave_transforms": [],
+      "set_variables": {},
+      "processors": [
+        {
+          "type": "mule:choice",
+          "name": "",
+          "content": ""
+        }
+      ]
+    },
+    {
+      "name": "database_select",
+      "type": "sub-flow",
+      "trigger": "none",
+      "http_method": "",
+      "http_path": "",
+      "api_layer": "system",
+      "step_count": 3,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [
+        "db:select"
+      ],
+      "subflow_refs": [],
+      "called_by": [
+        "get:\\hotels\\search:hotel-api-config"
+      ],
+      "call_count": 1,
+      "sql_queries": [
+        "SELECT hotel_id, name, distance_meters, from",
+        "SELECT hotel_id, name, distance_meters, from"
+      ],
+      "http_urls": [],
+      "dataweave_complexity": "none",
+      "is_boilerplate": false,
+      "error_handlers": [],
+      "dataweave_transforms": [],
+      "set_variables": {},
+      "processors": [
+        {
+          "type": "db:select",
+          "name": "",
+          "content": "SELECT hotel_id, name, distance_meters, from_price, currency FROM hotels WHERE city LIKE :query OR name LIKE :query ORDER BY from_price ASC\nSELECT hotel_id, name, distance_meters, from_price, currency"
+        }
+      ]
+    },
+    {
+      "name": "send-booking-notification",
+      "type": "sub-flow",
+      "trigger": "none",
+      "http_method": "",
+      "http_path": "",
+      "api_layer": "system",
+      "step_count": 3,
+      "source_project": "hotel-sys-api",
+      "source_layer": "system",
+      "connectors": [
+        "http:request"
+      ],
+      "subflow_refs": [],
+      "called_by": [
+        "post:\\hotels\\(id)\\book:hotel-api-config"
+      ],
+      "call_count": 1,
+      "sql_queries": [],
+      "http_urls": [],
+      "dataweave_complexity": "none",
+      "is_boilerplate": false,
+      "error_handlers": [],
+      "dataweave_transforms": [],
+      "set_variables": {},
+      "processors": [
+        {
+          "type": "mule:logger",
+          "name": "",
+          "content": ""
+        },
+        {
+          "type": "http:request",
+          "name": "",
+          "content": "#[{\n                to: vars.guestEmail default \"guest@example.com\",\n                subject: \"Booking Confirmed\",\n                body: \"Your booking at hotel \" ++ vars.hotelId ++ \" is confirmed.\"\n  "
+        }
+      ]
+    }
+  ],
+  "connectors": [
+    {
+      "name": "hotel-api-httpListenerConfig",
+      "type": "http:listener-config",
+      "connection_type": "http",
       "details": {
-        "connectors": ["MySQL Database", "Redis Cache"],
-        "transformations": 3,
-        "errorHandlers": 2,
-        "description": "Creates new hotel reservation with validation and inventory check"
+        "name": "hotel-api-httpListenerConfig",
+        "listener-connection.host": "0.0.0.0",
+        "listener-connection.port": "8081"
       }
     },
     {
-      "flowName": "get-reservation-by-id-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/reservations/{id}",
-      "processors": 6,
-      "complexity": "low",
+      "name": "hotel-db-config",
+      "type": "db:config",
+      "connection_type": "mssql",
       "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Retrieves reservation details by ID"
+        "name": "hotel-db-config",
+        "mssql-connection.host": "${db.host}",
+        "mssql-connection.port": "1433",
+        "mssql-connection.user": "${db.user}",
+        "mssql-connection.password": "${secure::db.password}",
+        "mssql-connection.database": "hotels"
       }
     },
     {
-      "flowName": "update-reservation-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "PUT",
-      "path": "/api/reservations/{id}",
-      "processors": 10,
-      "complexity": "medium",
+      "name": "hotel-api-config",
+      "type": "apikit:config",
+      "connection_type": "generic",
       "details": {
-        "connectors": ["MySQL Database", "Redis Cache"],
-        "transformations": 2,
-        "errorHandlers": 2,
-        "description": "Updates existing reservation with validation"
-      }
-    },
-    {
-      "flowName": "cancel-reservation-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "DELETE",
-      "path": "/api/reservations/{id}",
-      "processors": 8,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database", "Email Service"],
-        "transformations": 1,
-        "errorHandlers": 2,
-        "description": "Cancels reservation and sends confirmation email"
-      }
-    },
-    {
-      "flowName": "search-available-rooms-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/rooms/available",
-      "processors": 9,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database", "Redis Cache"],
-        "transformations": 2,
-        "errorHandlers": 1,
-        "description": "Searches for available rooms based on date range and criteria"
-      }
-    },
-    {
-      "flowName": "create-guest-profile-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "POST",
-      "path": "/api/guests",
-      "processors": 7,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Creates new guest profile with validation"
-      }
-    },
-    {
-      "flowName": "get-guest-profile-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/guests/{id}",
-      "processors": 5,
-      "complexity": "low",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Retrieves guest profile by ID"
-      }
-    },
-    {
-      "flowName": "update-guest-profile-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "PUT",
-      "path": "/api/guests/{id}",
-      "processors": 6,
-      "complexity": "low",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Updates guest profile information"
-      }
-    },
-    {
-      "flowName": "process-payment-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "POST",
-      "path": "/api/payments",
-      "processors": 15,
-      "complexity": "high",
-      "details": {
-        "connectors": ["MySQL Database", "Stripe Payment Gateway", "Email Service"],
-        "transformations": 3,
-        "errorHandlers": 3,
-        "description": "Processes payment with validation, gateway integration, and confirmation"
-      }
-    },
-    {
-      "flowName": "refund-payment-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "POST",
-      "path": "/api/payments/refund",
-      "processors": 12,
-      "complexity": "high",
-      "details": {
-        "connectors": ["MySQL Database", "Stripe Payment Gateway"],
-        "transformations": 2,
-        "errorHandlers": 2,
-        "description": "Processes payment refund through gateway"
-      }
-    },
-    {
-      "flowName": "get-payment-status-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/payments/{id}/status",
-      "processors": 5,
-      "complexity": "low",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Retrieves payment status and history"
-      }
-    },
-    {
-      "flowName": "send-confirmation-email-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 6,
-      "complexity": "low",
-      "details": {
-        "connectors": ["Email Service"],
-        "transformations": 2,
-        "errorHandlers": 1,
-        "description": "Sends reservation confirmation email to guest"
-      }
-    },
-    {
-      "flowName": "validate-room-availability-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 8,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database", "Redis Cache"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Validates room availability for given dates"
-      }
-    },
-    {
-      "flowName": "calculate-pricing-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 10,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 3,
-        "errorHandlers": 1,
-        "description": "Calculates total pricing including taxes and fees"
-      }
-    },
-    {
-      "flowName": "update-inventory-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 7,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database", "Redis Cache"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Updates room inventory after reservation"
-      }
-    },
-    {
-      "flowName": "log-audit-trail-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 4,
-      "complexity": "low",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 0,
-        "description": "Logs audit trail for compliance"
-      }
-    },
-    {
-      "flowName": "check-in-guest-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "POST",
-      "path": "/api/checkin",
-      "processors": 9,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 2,
-        "errorHandlers": 1,
-        "description": "Processes guest check-in"
-      }
-    },
-    {
-      "flowName": "check-out-guest-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "POST",
-      "path": "/api/checkout",
-      "processors": 11,
-      "complexity": "high",
-      "details": {
-        "connectors": ["MySQL Database", "Stripe Payment Gateway"],
-        "transformations": 2,
-        "errorHandlers": 2,
-        "description": "Processes guest check-out and final billing"
-      }
-    },
-    {
-      "flowName": "get-room-details-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/rooms/{id}",
-      "processors": 5,
-      "complexity": "low",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Retrieves detailed room information"
-      }
-    },
-    {
-      "flowName": "update-room-status-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "PATCH",
-      "path": "/api/rooms/{id}/status",
-      "processors": 6,
-      "complexity": "low",
-      "details": {
-        "connectors": ["MySQL Database", "Redis Cache"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Updates room status (clean, maintenance, etc.)"
-      }
-    },
-    {
-      "flowName": "get-reservation-report-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/reports/reservations",
-      "processors": 8,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 2,
-        "errorHandlers": 1,
-        "description": "Generates reservation report for date range"
-      }
-    },
-    {
-      "flowName": "get-revenue-report-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/reports/revenue",
-      "processors": 9,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 3,
-        "errorHandlers": 1,
-        "description": "Generates revenue report with analytics"
-      }
-    },
-    {
-      "flowName": "get-occupancy-rate-flow",
-      "type": "main",
-      "trigger": "HTTP Listener",
-      "httpMethod": "GET",
-      "path": "/api/reports/occupancy",
-      "processors": 7,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 2,
-        "errorHandlers": 1,
-        "description": "Calculates and returns occupancy rate metrics"
-      }
-    },
-    {
-      "flowName": "validate-guest-credentials-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 5,
-      "complexity": "low",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 1,
-        "errorHandlers": 1,
-        "description": "Validates guest credentials for check-in"
-      }
-    },
-    {
-      "flowName": "calculate-stay-duration-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 4,
-      "complexity": "low",
-      "details": {
-        "connectors": [],
-        "transformations": 2,
-        "errorHandlers": 0,
-        "description": "Calculates stay duration from dates"
-      }
-    },
-    {
-      "flowName": "apply-discount-rules-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 8,
-      "complexity": "medium",
-      "details": {
-        "connectors": ["MySQL Database"],
-        "transformations": 2,
-        "errorHandlers": 1,
-        "description": "Applies promotional discount rules"
-      }
-    },
-    {
-      "flowName": "send-payment-receipt-flow",
-      "type": "subflow",
-      "trigger": "Flow Reference",
-      "processors": 5,
-      "complexity": "low",
-      "details": {
-        "connectors": ["Email Service"],
-        "transformations": 2,
-        "errorHandlers": 1,
-        "description": "Sends payment receipt via email"
+        "name": "hotel-api-config",
+        "api": "api/hotel-api.raml",
+        "raml": "api/hotel-api.raml"
       }
     }
   ],
-  "connectorsData": [
+  "raml_endpoints": [
     {
-      "name": "MySQL_Hotel_DB",
-      "type": "Database",
-      "connectionType": "MySQL",
-      "config": {
-        "host": "hotel-db.internal.acme.com",
-        "port": 3306,
-        "database": "hotel_management",
-        "user": "mule_app",
-        "maxPoolSize": 20,
-        "minPoolSize": 5
-      }
+      "path": "/hotels/search",
+      "method": "GET",
+      "display_name": "Search Hotels",
+      "query_params": [
+        {
+          "name": "q",
+          "type": "string"
+        },
+        {
+          "name": "maxResults",
+          "type": "string"
+        }
+      ]
     },
     {
-      "name": "Redis_Cache",
-      "type": "Cache",
-      "connectionType": "Redis",
-      "config": {
-        "host": "redis.internal.acme.com",
-        "port": 6379,
-        "database": 0,
-        "connectionTimeout": 5000
-      }
+      "path": "/hotels/{id}",
+      "method": "GET",
+      "display_name": "Get Hotel Details",
+      "query_params": []
     },
     {
-      "name": "Stripe_Payment_Gateway",
-      "type": "HTTP",
-      "connectionType": "REST",
-      "config": {
-        "baseUrl": "https://api.stripe.com/v1",
-        "authentication": "API_KEY",
-        "timeout": 30000
-      }
-    },
-    {
-      "name": "Email_Service_SMTP",
-      "type": "Email",
-      "connectionType": "SMTP",
-      "config": {
-        "host": "smtp.acme.com",
-        "port": 587,
-        "user": "notifications@acme.com",
-        "security": "TLS"
-      }
-    },
-    {
-      "name": "Hotel_Legacy_System",
-      "type": "HTTP",
-      "connectionType": "SOAP",
-      "config": {
-        "wsdlUrl": "http://legacy.internal.acme.com:8080/HotelService?wsdl",
-        "timeout": 15000
-      }
-    },
-    {
-      "name": "Analytics_Service",
-      "type": "HTTP",
-      "connectionType": "REST",
-      "config": {
-        "baseUrl": "https://analytics.acme.com/api",
-        "authentication": "BEARER_TOKEN",
-        "timeout": 10000
-      }
-    },
-    {
-      "name": "File_Storage_S3",
-      "type": "File",
-      "connectionType": "S3",
-      "config": {
-        "region": "us-east-1",
-        "bucket": "hotel-documents",
-        "accessKeyId": "STORED_IN_VAULT"
-      }
-    },
-    {
-      "name": "Event_Queue_RabbitMQ",
-      "type": "Messaging",
-      "connectionType": "AMQP",
-      "config": {
-        "host": "rabbitmq.internal.acme.com",
-        "port": 5672,
-        "virtualHost": "/hotel"
-      }
+      "path": "/hotels/{id}/book",
+      "method": "POST",
+      "display_name": "Book Hotel",
+      "query_params": []
     }
   ],
-  "ramlEndpoints": [
-    {
-      "path": "/api/reservations",
-      "method": "POST",
-      "queryParams": [],
-      "description": "Create new reservation"
-    },
-    {
-      "path": "/api/reservations/{id}",
-      "method": "GET",
-      "queryParams": [],
-      "description": "Get reservation by ID"
-    },
-    {
-      "path": "/api/reservations/{id}",
-      "method": "PUT",
-      "queryParams": [],
-      "description": "Update reservation"
-    },
-    {
-      "path": "/api/reservations/{id}",
-      "method": "DELETE",
-      "queryParams": [],
-      "description": "Cancel reservation"
-    },
-    {
-      "path": "/api/rooms/available",
-      "method": "GET",
-      "queryParams": ["checkIn", "checkOut", "guests", "roomType"],
-      "description": "Search available rooms"
-    },
-    {
-      "path": "/api/guests",
-      "method": "POST",
-      "queryParams": [],
-      "description": "Create guest profile"
-    },
-    {
-      "path": "/api/guests/{id}",
-      "method": "GET",
-      "queryParams": [],
-      "description": "Get guest profile"
-    },
-    {
-      "path": "/api/guests/{id}",
-      "method": "PUT",
-      "queryParams": [],
-      "description": "Update guest profile"
-    },
-    {
-      "path": "/api/payments",
-      "method": "POST",
-      "queryParams": [],
-      "description": "Process payment"
-    },
-    {
-      "path": "/api/payments/refund",
-      "method": "POST",
-      "queryParams": [],
-      "description": "Process refund"
-    },
-    {
-      "path": "/api/payments/{id}/status",
-      "method": "GET",
-      "queryParams": [],
-      "description": "Get payment status"
-    },
-    {
-      "path": "/api/checkin",
-      "method": "POST",
-      "queryParams": [],
-      "description": "Check in guest"
-    },
-    {
-      "path": "/api/checkout",
-      "method": "POST",
-      "queryParams": [],
-      "description": "Check out guest"
-    },
-    {
-      "path": "/api/rooms/{id}",
-      "method": "GET",
-      "queryParams": [],
-      "description": "Get room details"
-    },
-    {
-      "path": "/api/rooms/{id}/status",
-      "method": "PATCH",
-      "queryParams": [],
-      "description": "Update room status"
-    },
-    {
-      "path": "/api/reports/reservations",
-      "method": "GET",
-      "queryParams": ["startDate", "endDate", "status"],
-      "description": "Generate reservation report"
-    },
-    {
-      "path": "/api/reports/revenue",
-      "method": "GET",
-      "queryParams": ["startDate", "endDate", "groupBy"],
-      "description": "Generate revenue report"
-    },
-    {
-      "path": "/api/reports/occupancy",
-      "method": "GET",
-      "queryParams": ["startDate", "endDate"],
-      "description": "Get occupancy rate"
-    }
-  ],
-  "dataweaveTransformations": [
-    {
-      "name": "reservation-to-db-transform",
-      "complexity": "medium",
-      "inputFormat": "JSON",
-      "outputFormat": "JSON"
-    },
-    {
-      "name": "guest-profile-transform",
-      "complexity": "low",
-      "inputFormat": "JSON",
-      "outputFormat": "JSON"
-    },
-    {
-      "name": "payment-gateway-request-transform",
-      "complexity": "high",
-      "inputFormat": "JSON",
-      "outputFormat": "JSON"
-    },
-    {
-      "name": "email-template-transform",
-      "complexity": "low",
-      "inputFormat": "JSON",
-      "outputFormat": "HTML"
-    },
-    {
-      "name": "report-aggregation-transform",
-      "complexity": "high",
-      "inputFormat": "JSON",
-      "outputFormat": "JSON"
-    }
-  ],
-  "configPropertiesData": [
+  "config_properties": [
     {
       "key": "db.host",
-      "value": "hotel-db.internal.acme.com",
-      "environment": "all"
+      "value": "hotel-db.example.com"
     },
     {
       "key": "db.port",
-      "value": "3306",
-      "environment": "all"
+      "value": "1433"
     },
     {
-      "key": "db.name",
-      "value": "hotel_management",
-      "environment": "all"
+      "key": "db.user",
+      "value": "hotel_api_user"
     },
     {
-      "key": "cache.enabled",
-      "value": "true",
-      "environment": "production"
+      "key": "db.password",
+      "value": "***"
     },
     {
-      "key": "stripe.api.key",
-      "value": "${secure::stripe.key}",
-      "environment": "production"
+      "key": "db.database",
+      "value": "hotels"
     },
     {
-      "key": "email.from",
-      "value": "notifications@acme.com",
-      "environment": "all"
+      "key": "http.port",
+      "value": "8081"
+    },
+    {
+      "key": "api.version",
+      "value": "v1"
+    },
+    {
+      "key": "notification.service.host",
+      "value": "notifications.internal.example.com"
+    },
+    {
+      "key": "notification.service.port",
+      "value": "8443"
+    },
+    {
+      "key": "notification.email.from",
+      "value": "noreply@example.com"
     }
   ]
 }
