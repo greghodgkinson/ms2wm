@@ -5,8 +5,18 @@ IMAGE_NAME="migration-tracker"
 CONTAINER_NAME="migration-tracker-app"
 PORT=3000
 
+echo "Loading environment variables..."
+if [ -f .env ]; then
+    export $(cat .env | grep -v '^#' | xargs)
+else
+    echo "Warning: .env file not found"
+fi
+
 echo "Building Docker image..."
-docker build -t $IMAGE_NAME .
+docker build \
+    --build-arg VITE_SUPABASE_URL="$VITE_SUPABASE_URL" \
+    --build-arg VITE_SUPABASE_ANON_KEY="$VITE_SUPABASE_ANON_KEY" \
+    -t $IMAGE_NAME .
 
 if [ $? -ne 0 ]; then
     echo "Error: Docker build failed"
