@@ -1,0 +1,43 @@
+{
+  "repositories": [
+    {
+      "id": "repo-001",
+      "name": "hotel-reservation-api",
+      "url": "https://github.com/acme-corp/hotel-reservation-api.git",
+      "branch": "main",
+      "analysis_status": "analyzed",
+      "last_scanned": "2026-02-20T08:30:00Z",
+      "metrics": {
+        "total_files": 156,
+        "mule_flows": 12,
+        "config_files": 8
+      }
+    },
+    {
+      "id": "repo-002",
+      "name": "hotel-guest-services",
+      "url": "https://github.com/acme-corp/hotel-guest-services.git",
+      "branch": "develop",
+      "analysis_status": "analyzed",
+      "last_scanned": "2026-02-20T08:35:00Z",
+      "metrics": {
+        "total_files": 98,
+        "mule_flows": 8,
+        "config_files": 5
+      }
+    },
+    {
+      "id": "repo-003",
+      "name": "hotel-payment-integration",
+      "url": "https://github.com/acme-corp/hotel-payment-integration.git",
+      "branch": "main",
+      "analysis_status": "analyzed",
+      "last_scanned": "2026-02-20T08:40:00Z",
+      "metrics": {
+        "total_files": 72,
+        "mule_flows": 6,
+        "config_files": 4
+      }
+    }
+  ]
+}

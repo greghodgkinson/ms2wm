@@ -1,0 +1,94 @@
+{
+  "environments": {
+    "development": {
+      "name": "Development",
+      "server": {
+        "host": "dev-wm.acme.internal",
+        "port": 5555,
+        "protocol": "http"
+      },
+      "database": {
+        "host": "dev-mysql.acme.internal",
+        "port": 3306,
+        "database": "hotel_dev",
+        "user": "dev_user",
+        "max_connections": 10,
+        "min_connections": 2
+      },
+      "integration_server": {
+        "memory_allocation": "2GB",
+        "thread_pool_size": 50,
+        "timeout_seconds": 60
+      },
+      "monitoring": {
+        "metrics_enabled": true,
+        "health_check_path": "/health",
+        "log_level": "DEBUG"
+      },
+      "security": {
+        "ssl_enabled": false,
+        "authentication_method": "basic"
+      }
+    },
+    "staging": {
+      "name": "Staging",
+      "server": {
+        "host": "staging-wm.acme.internal",
+        "port": 5555,
+        "protocol": "https"
+      },
+      "database": {
+        "host": "staging-mysql.acme.internal",
+        "port": 3306,
+        "database": "hotel_staging",
+        "user": "staging_user",
+        "max_connections": 20,
+        "min_connections": 5
+      },
+      "integration_server": {
+        "memory_allocation": "4GB",
+        "thread_pool_size": 100,
+        "timeout_seconds": 30
+      },
+      "monitoring": {
+        "metrics_enabled": true,
+        "health_check_path": "/health",
+        "log_level": "INFO"
+      },
+      "security": {
+        "ssl_enabled": true,
+        "authentication_method": "oauth2"
+      }
+    },
+    "production": {
+      "name": "Production",
+      "server": {
+        "host": "prod-wm.acme.com",
+        "port": 5555,
+        "protocol": "https"
+      },
+      "database": {
+        "host": "prod-mysql-primary.acme.internal",
+        "port": 3306,
+        "database": "hotel_production",
+        "user": "prod_user",
+        "max_connections": 50,
+        "min_connections": 10
+      },
+      "integration_server": {
+        "memory_allocation": "8GB",
+        "thread_pool_size": 200,
+        "timeout_seconds": 30
+      },
+      "monitoring": {
+        "metrics_enabled": true,
+        "health_check_path": "/health",
+        "log_level": "WARN"
+      },
+      "security": {
+        "ssl_enabled": true,
+        "authentication_method": "oauth2"
+      }
+    }
+  }
+}

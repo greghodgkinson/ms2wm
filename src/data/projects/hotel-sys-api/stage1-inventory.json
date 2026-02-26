@@ -1,0 +1,657 @@
+{
+  "summary": {
+    "totalFlows": 26,
+    "totalSubflows": 14,
+    "totalConnectors": 8,
+    "totalEndpoints": 18
+  },
+  "flowsData": [
+    {
+      "flowName": "create-reservation-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "POST",
+      "path": "/api/reservations",
+      "processors": 12,
+      "complexity": "high",
+      "details": {
+        "connectors": ["MySQL Database", "Redis Cache"],
+        "transformations": 3,
+        "errorHandlers": 2,
+        "description": "Creates new hotel reservation with validation and inventory check"
+      }
+    },
+    {
+      "flowName": "get-reservation-by-id-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/reservations/{id}",
+      "processors": 6,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Retrieves reservation details by ID"
+      }
+    },
+    {
+      "flowName": "update-reservation-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "PUT",
+      "path": "/api/reservations/{id}",
+      "processors": 10,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database", "Redis Cache"],
+        "transformations": 2,
+        "errorHandlers": 2,
+        "description": "Updates existing reservation with validation"
+      }
+    },
+    {
+      "flowName": "cancel-reservation-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "DELETE",
+      "path": "/api/reservations/{id}",
+      "processors": 8,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database", "Email Service"],
+        "transformations": 1,
+        "errorHandlers": 2,
+        "description": "Cancels reservation and sends confirmation email"
+      }
+    },
+    {
+      "flowName": "search-available-rooms-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/rooms/available",
+      "processors": 9,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database", "Redis Cache"],
+        "transformations": 2,
+        "errorHandlers": 1,
+        "description": "Searches for available rooms based on date range and criteria"
+      }
+    },
+    {
+      "flowName": "create-guest-profile-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "POST",
+      "path": "/api/guests",
+      "processors": 7,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Creates new guest profile with validation"
+      }
+    },
+    {
+      "flowName": "get-guest-profile-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/guests/{id}",
+      "processors": 5,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Retrieves guest profile by ID"
+      }
+    },
+    {
+      "flowName": "update-guest-profile-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "PUT",
+      "path": "/api/guests/{id}",
+      "processors": 6,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Updates guest profile information"
+      }
+    },
+    {
+      "flowName": "process-payment-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "POST",
+      "path": "/api/payments",
+      "processors": 15,
+      "complexity": "high",
+      "details": {
+        "connectors": ["MySQL Database", "Stripe Payment Gateway", "Email Service"],
+        "transformations": 3,
+        "errorHandlers": 3,
+        "description": "Processes payment with validation, gateway integration, and confirmation"
+      }
+    },
+    {
+      "flowName": "refund-payment-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "POST",
+      "path": "/api/payments/refund",
+      "processors": 12,
+      "complexity": "high",
+      "details": {
+        "connectors": ["MySQL Database", "Stripe Payment Gateway"],
+        "transformations": 2,
+        "errorHandlers": 2,
+        "description": "Processes payment refund through gateway"
+      }
+    },
+    {
+      "flowName": "get-payment-status-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/payments/{id}/status",
+      "processors": 5,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Retrieves payment status and history"
+      }
+    },
+    {
+      "flowName": "send-confirmation-email-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 6,
+      "complexity": "low",
+      "details": {
+        "connectors": ["Email Service"],
+        "transformations": 2,
+        "errorHandlers": 1,
+        "description": "Sends reservation confirmation email to guest"
+      }
+    },
+    {
+      "flowName": "validate-room-availability-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 8,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database", "Redis Cache"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Validates room availability for given dates"
+      }
+    },
+    {
+      "flowName": "calculate-pricing-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 10,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 3,
+        "errorHandlers": 1,
+        "description": "Calculates total pricing including taxes and fees"
+      }
+    },
+    {
+      "flowName": "update-inventory-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 7,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database", "Redis Cache"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Updates room inventory after reservation"
+      }
+    },
+    {
+      "flowName": "log-audit-trail-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 4,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 0,
+        "description": "Logs audit trail for compliance"
+      }
+    },
+    {
+      "flowName": "check-in-guest-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "POST",
+      "path": "/api/checkin",
+      "processors": 9,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 2,
+        "errorHandlers": 1,
+        "description": "Processes guest check-in"
+      }
+    },
+    {
+      "flowName": "check-out-guest-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "POST",
+      "path": "/api/checkout",
+      "processors": 11,
+      "complexity": "high",
+      "details": {
+        "connectors": ["MySQL Database", "Stripe Payment Gateway"],
+        "transformations": 2,
+        "errorHandlers": 2,
+        "description": "Processes guest check-out and final billing"
+      }
+    },
+    {
+      "flowName": "get-room-details-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/rooms/{id}",
+      "processors": 5,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Retrieves detailed room information"
+      }
+    },
+    {
+      "flowName": "update-room-status-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "PATCH",
+      "path": "/api/rooms/{id}/status",
+      "processors": 6,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database", "Redis Cache"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Updates room status (clean, maintenance, etc.)"
+      }
+    },
+    {
+      "flowName": "get-reservation-report-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/reports/reservations",
+      "processors": 8,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 2,
+        "errorHandlers": 1,
+        "description": "Generates reservation report for date range"
+      }
+    },
+    {
+      "flowName": "get-revenue-report-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/reports/revenue",
+      "processors": 9,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 3,
+        "errorHandlers": 1,
+        "description": "Generates revenue report with analytics"
+      }
+    },
+    {
+      "flowName": "get-occupancy-rate-flow",
+      "type": "main",
+      "trigger": "HTTP Listener",
+      "httpMethod": "GET",
+      "path": "/api/reports/occupancy",
+      "processors": 7,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 2,
+        "errorHandlers": 1,
+        "description": "Calculates and returns occupancy rate metrics"
+      }
+    },
+    {
+      "flowName": "validate-guest-credentials-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 5,
+      "complexity": "low",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 1,
+        "errorHandlers": 1,
+        "description": "Validates guest credentials for check-in"
+      }
+    },
+    {
+      "flowName": "calculate-stay-duration-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 4,
+      "complexity": "low",
+      "details": {
+        "connectors": [],
+        "transformations": 2,
+        "errorHandlers": 0,
+        "description": "Calculates stay duration from dates"
+      }
+    },
+    {
+      "flowName": "apply-discount-rules-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 8,
+      "complexity": "medium",
+      "details": {
+        "connectors": ["MySQL Database"],
+        "transformations": 2,
+        "errorHandlers": 1,
+        "description": "Applies promotional discount rules"
+      }
+    },
+    {
+      "flowName": "send-payment-receipt-flow",
+      "type": "subflow",
+      "trigger": "Flow Reference",
+      "processors": 5,
+      "complexity": "low",
+      "details": {
+        "connectors": ["Email Service"],
+        "transformations": 2,
+        "errorHandlers": 1,
+        "description": "Sends payment receipt via email"
+      }
+    }
+  ],
+  "connectorsData": [
+    {
+      "name": "MySQL_Hotel_DB",
+      "type": "Database",
+      "connectionType": "MySQL",
+      "config": {
+        "host": "hotel-db.internal.acme.com",
+        "port": 3306,
+        "database": "hotel_management",
+        "user": "mule_app",
+        "maxPoolSize": 20,
+        "minPoolSize": 5
+      }
+    },
+    {
+      "name": "Redis_Cache",
+      "type": "Cache",
+      "connectionType": "Redis",
+      "config": {
+        "host": "redis.internal.acme.com",
+        "port": 6379,
+        "database": 0,
+        "connectionTimeout": 5000
+      }
+    },
+    {
+      "name": "Stripe_Payment_Gateway",
+      "type": "HTTP",
+      "connectionType": "REST",
+      "config": {
+        "baseUrl": "https://api.stripe.com/v1",
+        "authentication": "API_KEY",
+        "timeout": 30000
+      }
+    },
+    {
+      "name": "Email_Service_SMTP",
+      "type": "Email",
+      "connectionType": "SMTP",
+      "config": {
+        "host": "smtp.acme.com",
+        "port": 587,
+        "user": "notifications@acme.com",
+        "security": "TLS"
+      }
+    },
+    {
+      "name": "Hotel_Legacy_System",
+      "type": "HTTP",
+      "connectionType": "SOAP",
+      "config": {
+        "wsdlUrl": "http://legacy.internal.acme.com:8080/HotelService?wsdl",
+        "timeout": 15000
+      }
+    },
+    {
+      "name": "Analytics_Service",
+      "type": "HTTP",
+      "connectionType": "REST",
+      "config": {
+        "baseUrl": "https://analytics.acme.com/api",
+        "authentication": "BEARER_TOKEN",
+        "timeout": 10000
+      }
+    },
+    {
+      "name": "File_Storage_S3",
+      "type": "File",
+      "connectionType": "S3",
+      "config": {
+        "region": "us-east-1",
+        "bucket": "hotel-documents",
+        "accessKeyId": "STORED_IN_VAULT"
+      }
+    },
+    {
+      "name": "Event_Queue_RabbitMQ",
+      "type": "Messaging",
+      "connectionType": "AMQP",
+      "config": {
+        "host": "rabbitmq.internal.acme.com",
+        "port": 5672,
+        "virtualHost": "/hotel"
+      }
+    }
+  ],
+  "ramlEndpoints": [
+    {
+      "path": "/api/reservations",
+      "method": "POST",
+      "queryParams": [],
+      "description": "Create new reservation"
+    },
+    {
+      "path": "/api/reservations/{id}",
+      "method": "GET",
+      "queryParams": [],
+      "description": "Get reservation by ID"
+    },
+    {
+      "path": "/api/reservations/{id}",
+      "method": "PUT",
+      "queryParams": [],
+      "description": "Update reservation"
+    },
+    {
+      "path": "/api/reservations/{id}",
+      "method": "DELETE",
+      "queryParams": [],
+      "description": "Cancel reservation"
+    },
+    {
+      "path": "/api/rooms/available",
+      "method": "GET",
+      "queryParams": ["checkIn", "checkOut", "guests", "roomType"],
+      "description": "Search available rooms"
+    },
+    {
+      "path": "/api/guests",
+      "method": "POST",
+      "queryParams": [],
+      "description": "Create guest profile"
+    },
+    {
+      "path": "/api/guests/{id}",
+      "method": "GET",
+      "queryParams": [],
+      "description": "Get guest profile"
+    },
+    {
+      "path": "/api/guests/{id}",
+      "method": "PUT",
+      "queryParams": [],
+      "description": "Update guest profile"
+    },
+    {
+      "path": "/api/payments",
+      "method": "POST",
+      "queryParams": [],
+      "description": "Process payment"
+    },
+    {
+      "path": "/api/payments/refund",
+      "method": "POST",
+      "queryParams": [],
+      "description": "Process refund"
+    },
+    {
+      "path": "/api/payments/{id}/status",
+      "method": "GET",
+      "queryParams": [],
+      "description": "Get payment status"
+    },
+    {
+      "path": "/api/checkin",
+      "method": "POST",
+      "queryParams": [],
+      "description": "Check in guest"
+    },
+    {
+      "path": "/api/checkout",
+      "method": "POST",
+      "queryParams": [],
+      "description": "Check out guest"
+    },
+    {
+      "path": "/api/rooms/{id}",
+      "method": "GET",
+      "queryParams": [],
+      "description": "Get room details"
+    },
+    {
+      "path": "/api/rooms/{id}/status",
+      "method": "PATCH",
+      "queryParams": [],
+      "description": "Update room status"
+    },
+    {
+      "path": "/api/reports/reservations",
+      "method": "GET",
+      "queryParams": ["startDate", "endDate", "status"],
+      "description": "Generate reservation report"
+    },
+    {
+      "path": "/api/reports/revenue",
+      "method": "GET",
+      "queryParams": ["startDate", "endDate", "groupBy"],
+      "description": "Generate revenue report"
+    },
+    {
+      "path": "/api/reports/occupancy",
+      "method": "GET",
+      "queryParams": ["startDate", "endDate"],
+      "description": "Get occupancy rate"
+    }
+  ],
+  "dataweaveTransformations": [
+    {
+      "name": "reservation-to-db-transform",
+      "complexity": "medium",
+      "inputFormat": "JSON",
+      "outputFormat": "JSON"
+    },
+    {
+      "name": "guest-profile-transform",
+      "complexity": "low",
+      "inputFormat": "JSON",
+      "outputFormat": "JSON"
+    },
+    {
+      "name": "payment-gateway-request-transform",
+      "complexity": "high",
+      "inputFormat": "JSON",
+      "outputFormat": "JSON"
+    },
+    {
+      "name": "email-template-transform",
+      "complexity": "low",
+      "inputFormat": "JSON",
+      "outputFormat": "HTML"
+    },
+    {
+      "name": "report-aggregation-transform",
+      "complexity": "high",
+      "inputFormat": "JSON",
+      "outputFormat": "JSON"
+    }
+  ],
+  "configPropertiesData": [
+    {
+      "key": "db.host",
+      "value": "hotel-db.internal.acme.com",
+      "environment": "all"
+    },
+    {
+      "key": "db.port",
+      "value": "3306",
+      "environment": "all"
+    },
+    {
+      "key": "db.name",
+      "value": "hotel_management",
+      "environment": "all"
+    },
+    {
+      "key": "cache.enabled",
+      "value": "true",
+      "environment": "production"
+    },
+    {
+      "key": "stripe.api.key",
+      "value": "${secure::stripe.key}",
+      "environment": "production"
+    },
+    {
+      "key": "email.from",
+      "value": "notifications@acme.com",
+      "environment": "all"
+    }
+  ]
+}

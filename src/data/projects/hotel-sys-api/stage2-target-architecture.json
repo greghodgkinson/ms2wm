@@ -1,0 +1,382 @@
+{
+  "consolidation_summary": {
+    "total_mule_flows": 26,
+    "total_wm_flow_services": 15,
+    "consolidation_ratio": "1.73:1",
+    "total_estimated_minutes": 2340
+  },
+  "flow_services": [
+    {
+      "name": "ReservationManagementService",
+      "description": "Consolidated service for all reservation operations",
+      "absorbed_mule_flows": [
+        "create-reservation-flow",
+        "get-reservation-by-id-flow",
+        "update-reservation-flow",
+        "cancel-reservation-flow"
+      ],
+      "http_method": "Multiple",
+      "path": "/api/reservations",
+      "complexity": "high",
+      "estimated_migration_time_minutes": 240,
+      "source_mule_flows": [
+        {
+          "name": "create-reservation-flow",
+          "processors": 12,
+          "complexity": "high"
+        },
+        {
+          "name": "get-reservation-by-id-flow",
+          "processors": 6,
+          "complexity": "low"
+        },
+        {
+          "name": "update-reservation-flow",
+          "processors": 10,
+          "complexity": "medium"
+        },
+        {
+          "name": "cancel-reservation-flow",
+          "processors": 8,
+          "complexity": "medium"
+        }
+      ]
+    },
+    {
+      "name": "RoomAvailabilityService",
+      "description": "Service for room search and availability management",
+      "absorbed_mule_flows": [
+        "search-available-rooms-flow",
+        "get-room-details-flow",
+        "update-room-status-flow"
+      ],
+      "http_method": "Multiple",
+      "path": "/api/rooms",
+      "complexity": "medium",
+      "estimated_migration_time_minutes": 180,
+      "source_mule_flows": [
+        {
+          "name": "search-available-rooms-flow",
+          "processors": 9,
+          "complexity": "medium"
+        },
+        {
+          "name": "get-room-details-flow",
+          "processors": 5,
+          "complexity": "low"
+        },
+        {
+          "name": "update-room-status-flow",
+          "processors": 6,
+          "complexity": "low"
+        }
+      ]
+    },
+    {
+      "name": "GuestProfileService",
+      "description": "Guest profile CRUD operations",
+      "absorbed_mule_flows": [
+        "create-guest-profile-flow",
+        "get-guest-profile-flow",
+        "update-guest-profile-flow"
+      ],
+      "http_method": "Multiple",
+      "path": "/api/guests",
+      "complexity": "low",
+      "estimated_migration_time_minutes": 120,
+      "source_mule_flows": [
+        {
+          "name": "create-guest-profile-flow",
+          "processors": 7,
+          "complexity": "medium"
+        },
+        {
+          "name": "get-guest-profile-flow",
+          "processors": 5,
+          "complexity": "low"
+        },
+        {
+          "name": "update-guest-profile-flow",
+          "processors": 6,
+          "complexity": "low"
+        }
+      ]
+    },
+    {
+      "name": "PaymentProcessingService",
+      "description": "Payment and refund processing with gateway integration",
+      "absorbed_mule_flows": [
+        "process-payment-flow",
+        "refund-payment-flow",
+        "get-payment-status-flow"
+      ],
+      "http_method": "Multiple",
+      "path": "/api/payments",
+      "complexity": "high",
+      "estimated_migration_time_minutes": 300,
+      "source_mule_flows": [
+        {
+          "name": "process-payment-flow",
+          "processors": 15,
+          "complexity": "high"
+        },
+        {
+          "name": "refund-payment-flow",
+          "processors": 12,
+          "complexity": "high"
+        },
+        {
+          "name": "get-payment-status-flow",
+          "processors": 5,
+          "complexity": "low"
+        }
+      ]
+    },
+    {
+      "name": "CheckInCheckOutService",
+      "description": "Guest check-in and check-out operations",
+      "absorbed_mule_flows": [
+        "check-in-guest-flow",
+        "check-out-guest-flow"
+      ],
+      "http_method": "POST",
+      "path": "/api/checkin-checkout",
+      "complexity": "high",
+      "estimated_migration_time_minutes": 200,
+      "source_mule_flows": [
+        {
+          "name": "check-in-guest-flow",
+          "processors": 9,
+          "complexity": "medium"
+        },
+        {
+          "name": "check-out-guest-flow",
+          "processors": 11,
+          "complexity": "high"
+        }
+      ]
+    },
+    {
+      "name": "ReportingService",
+      "description": "Analytics and reporting for reservations, revenue, and occupancy",
+      "absorbed_mule_flows": [
+        "get-reservation-report-flow",
+        "get-revenue-report-flow",
+        "get-occupancy-rate-flow"
+      ],
+      "http_method": "GET",
+      "path": "/api/reports",
+      "complexity": "medium",
+      "estimated_migration_time_minutes": 180,
+      "source_mule_flows": [
+        {
+          "name": "get-reservation-report-flow",
+          "processors": 8,
+          "complexity": "medium"
+        },
+        {
+          "name": "get-revenue-report-flow",
+          "processors": 9,
+          "complexity": "medium"
+        },
+        {
+          "name": "get-occupancy-rate-flow",
+          "processors": 7,
+          "complexity": "medium"
+        }
+      ]
+    },
+    {
+      "name": "EmailNotificationService",
+      "description": "Email notification handling",
+      "absorbed_mule_flows": [
+        "send-confirmation-email-flow",
+        "send-payment-receipt-flow"
+      ],
+      "http_method": "Internal",
+      "path": "N/A",
+      "complexity": "low",
+      "estimated_migration_time_minutes": 90,
+      "source_mule_flows": [
+        {
+          "name": "send-confirmation-email-flow",
+          "processors": 6,
+          "complexity": "low"
+        },
+        {
+          "name": "send-payment-receipt-flow",
+          "processors": 5,
+          "complexity": "low"
+        }
+      ]
+    },
+    {
+      "name": "InventoryManagementService",
+      "description": "Room inventory and availability validation",
+      "absorbed_mule_flows": [
+        "validate-room-availability-flow",
+        "update-inventory-flow"
+      ],
+      "http_method": "Internal",
+      "path": "N/A",
+      "complexity": "medium",
+      "estimated_migration_time_minutes": 150,
+      "source_mule_flows": [
+        {
+          "name": "validate-room-availability-flow",
+          "processors": 8,
+          "complexity": "medium"
+        },
+        {
+          "name": "update-inventory-flow",
+          "processors": 7,
+          "complexity": "medium"
+        }
+      ]
+    },
+    {
+      "name": "PricingCalculationService",
+      "description": "Pricing calculation and discount application",
+      "absorbed_mule_flows": [
+        "calculate-pricing-flow",
+        "apply-discount-rules-flow"
+      ],
+      "http_method": "Internal",
+      "path": "N/A",
+      "complexity": "medium",
+      "estimated_migration_time_minutes": 180,
+      "source_mule_flows": [
+        {
+          "name": "calculate-pricing-flow",
+          "processors": 10,
+          "complexity": "medium"
+        },
+        {
+          "name": "apply-discount-rules-flow",
+          "processors": 8,
+          "complexity": "medium"
+        }
+      ]
+    },
+    {
+      "name": "ValidationService",
+      "description": "Guest credential and data validation",
+      "absorbed_mule_flows": [
+        "validate-guest-credentials-flow"
+      ],
+      "http_method": "Internal",
+      "path": "N/A",
+      "complexity": "low",
+      "estimated_migration_time_minutes": 60,
+      "source_mule_flows": [
+        {
+          "name": "validate-guest-credentials-flow",
+          "processors": 5,
+          "complexity": "low"
+        }
+      ]
+    },
+    {
+      "name": "DateCalculationService",
+      "description": "Date and duration calculations",
+      "absorbed_mule_flows": [
+        "calculate-stay-duration-flow"
+      ],
+      "http_method": "Internal",
+      "path": "N/A",
+      "complexity": "low",
+      "estimated_migration_time_minutes": 45,
+      "source_mule_flows": [
+        {
+          "name": "calculate-stay-duration-flow",
+          "processors": 4,
+          "complexity": "low"
+        }
+      ]
+    },
+    {
+      "name": "AuditLoggingService",
+      "description": "Audit trail and compliance logging",
+      "absorbed_mule_flows": [
+        "log-audit-trail-flow"
+      ],
+      "http_method": "Internal",
+      "path": "N/A",
+      "complexity": "low",
+      "estimated_migration_time_minutes": 60,
+      "source_mule_flows": [
+        {
+          "name": "log-audit-trail-flow",
+          "processors": 4,
+          "complexity": "low"
+        }
+      ]
+    }
+  ],
+  "rest_apis": [
+    {
+      "name": "HotelReservationAPI",
+      "version": "1.0",
+      "description": "Public REST API for hotel reservation system",
+      "resources": [
+        {
+          "path": "/reservations",
+          "operations": ["GET", "POST"]
+        },
+        {
+          "path": "/reservations/{id}",
+          "operations": ["GET", "PUT", "DELETE"]
+        },
+        {
+          "path": "/rooms",
+          "operations": ["GET"]
+        },
+        {
+          "path": "/rooms/{id}",
+          "operations": ["GET", "PATCH"]
+        },
+        {
+          "path": "/guests",
+          "operations": ["POST"]
+        },
+        {
+          "path": "/guests/{id}",
+          "operations": ["GET", "PUT"]
+        },
+        {
+          "path": "/payments",
+          "operations": ["POST"]
+        },
+        {
+          "path": "/payments/refund",
+          "operations": ["POST"]
+        },
+        {
+          "path": "/payments/{id}/status",
+          "operations": ["GET"]
+        },
+        {
+          "path": "/checkin",
+          "operations": ["POST"]
+        },
+        {
+          "path": "/checkout",
+          "operations": ["POST"]
+        },
+        {
+          "path": "/reports/reservations",
+          "operations": ["GET"]
+        },
+        {
+          "path": "/reports/revenue",
+          "operations": ["GET"]
+        },
+        {
+          "path": "/reports/occupancy",
+          "operations": ["GET"]
+        }
+      ]
+    }
+  ],
+  "workflows": []
+}

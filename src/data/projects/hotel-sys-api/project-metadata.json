@@ -1,0 +1,17 @@
+{
+  "id": "hotel-sys-api-001",
+  "name": "Hotel System API",
+  "description": "Migration of legacy Mule 4 hotel reservation and management system to webMethods Integration Platform",
+  "status": "in_progress",
+  "current_stage": 3,
+  "created_at": "2026-01-15T10:00:00Z",
+  "updated_at": "2026-02-26T14:30:00Z",
+  "progress": {
+    "stage0": 100,
+    "stage1": 100,
+    "stage2": 100,
+    "stage3": 75,
+    "stage4": 30,
+    "stage5": 0
+  }
+}

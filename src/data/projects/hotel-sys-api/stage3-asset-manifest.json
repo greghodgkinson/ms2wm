@@ -1,0 +1,495 @@
+{
+  "summary": {
+    "total_assets": 42,
+    "db_connectors": 3,
+    "integration_flows": 15,
+    "http_listeners": 1,
+    "rest_endpoints": 14,
+    "document_types": 9
+  },
+  "assets": [
+    {
+      "asset_type": "db_connector",
+      "name": "HotelDB_MySQL_Connector",
+      "description": "Primary database connector for hotel management system",
+      "dbms": "MySQL",
+      "server": "CHANGE_ME_DB_HOST",
+      "port": 3306,
+      "database": "hotel_management",
+      "user": "CHANGE_ME_DB_USER",
+      "password_alias": "CHANGE_ME_DB_PASSWORD",
+      "max_connections": 20,
+      "min_connections": 5,
+      "connection_timeout": 30
+    },
+    {
+      "asset_type": "db_connector",
+      "name": "Redis_Cache_Connector",
+      "description": "Redis cache for session and availability data",
+      "dbms": "Redis",
+      "server": "CHANGE_ME_REDIS_HOST",
+      "port": 6379,
+      "database": 0,
+      "password_alias": "CHANGE_ME_REDIS_PASSWORD",
+      "connection_timeout": 5
+    },
+    {
+      "asset_type": "db_connector",
+      "name": "Analytics_DB_Connector",
+      "description": "Analytics database for reporting",
+      "dbms": "PostgreSQL",
+      "server": "CHANGE_ME_ANALYTICS_HOST",
+      "port": 5432,
+      "database": "hotel_analytics",
+      "user": "CHANGE_ME_ANALYTICS_USER",
+      "password_alias": "CHANGE_ME_ANALYTICS_PASSWORD",
+      "max_connections": 10,
+      "min_connections": 2
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "CreateReservation",
+      "description": "Creates new hotel reservation with validation",
+      "trigger_type": "REST",
+      "source_mule_flow": "create-reservation-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector", "Redis_Cache_Connector"],
+      "input_document_type": "ReservationRequest",
+      "output_document_type": "ReservationResponse",
+      "linked_services": ["ReservationManagementService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "GetReservationById",
+      "description": "Retrieves reservation by ID",
+      "trigger_type": "REST",
+      "source_mule_flow": "get-reservation-by-id-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "ReservationIdRequest",
+      "output_document_type": "ReservationResponse",
+      "linked_services": ["ReservationManagementService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "UpdateReservation",
+      "description": "Updates existing reservation",
+      "trigger_type": "REST",
+      "source_mule_flow": "update-reservation-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector", "Redis_Cache_Connector"],
+      "input_document_type": "ReservationUpdateRequest",
+      "output_document_type": "ReservationResponse",
+      "linked_services": ["ReservationManagementService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "CancelReservation",
+      "description": "Cancels reservation and sends notification",
+      "trigger_type": "REST",
+      "source_mule_flow": "cancel-reservation-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "ReservationIdRequest",
+      "output_document_type": "CancellationResponse",
+      "linked_services": ["ReservationManagementService", "EmailNotificationService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "SearchAvailableRooms",
+      "description": "Searches for available rooms by criteria",
+      "trigger_type": "REST",
+      "source_mule_flow": "search-available-rooms-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector", "Redis_Cache_Connector"],
+      "input_document_type": "RoomSearchRequest",
+      "output_document_type": "RoomSearchResponse",
+      "linked_services": ["RoomAvailabilityService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "CreateGuestProfile",
+      "description": "Creates new guest profile",
+      "trigger_type": "REST",
+      "source_mule_flow": "create-guest-profile-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "GuestProfileRequest",
+      "output_document_type": "GuestProfileResponse",
+      "linked_services": ["GuestProfileService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "GetGuestProfile",
+      "description": "Retrieves guest profile by ID",
+      "trigger_type": "REST",
+      "source_mule_flow": "get-guest-profile-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "GuestIdRequest",
+      "output_document_type": "GuestProfileResponse",
+      "linked_services": ["GuestProfileService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "UpdateGuestProfile",
+      "description": "Updates guest profile information",
+      "trigger_type": "REST",
+      "source_mule_flow": "update-guest-profile-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "GuestProfileUpdateRequest",
+      "output_document_type": "GuestProfileResponse",
+      "linked_services": ["GuestProfileService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "ProcessPayment",
+      "description": "Processes payment through gateway",
+      "trigger_type": "REST",
+      "source_mule_flow": "process-payment-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "PaymentRequest",
+      "output_document_type": "PaymentResponse",
+      "linked_services": ["PaymentProcessingService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "RefundPayment",
+      "description": "Processes payment refund",
+      "trigger_type": "REST",
+      "source_mule_flow": "refund-payment-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "RefundRequest",
+      "output_document_type": "RefundResponse",
+      "linked_services": ["PaymentProcessingService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "CheckInGuest",
+      "description": "Processes guest check-in",
+      "trigger_type": "REST",
+      "source_mule_flow": "check-in-guest-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "CheckInRequest",
+      "output_document_type": "CheckInResponse",
+      "linked_services": ["CheckInCheckOutService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "CheckOutGuest",
+      "description": "Processes guest check-out",
+      "trigger_type": "REST",
+      "source_mule_flow": "check-out-guest-flow",
+      "required_connectors": ["HotelDB_MySQL_Connector"],
+      "input_document_type": "CheckOutRequest",
+      "output_document_type": "CheckOutResponse",
+      "linked_services": ["CheckInCheckOutService", "PaymentProcessingService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "GenerateReservationReport",
+      "description": "Generates reservation analytics report",
+      "trigger_type": "REST",
+      "source_mule_flow": "get-reservation-report-flow",
+      "required_connectors": ["Analytics_DB_Connector"],
+      "input_document_type": "ReportRequest",
+      "output_document_type": "ReportResponse",
+      "linked_services": ["ReportingService"]
+    },
+    {
+      "asset_type": "integration_flow",
+      "name": "GenerateRevenueReport",
+      "description": "Generates revenue analytics report",
+      "trigger_type": "REST",
+      "source_mule_flow": "get-revenue-report-flow",
+      "required_connectors": ["Analytics_DB_Connector"],
+      "input_document_type": "ReportRequest",
+      "output_document_type": "ReportResponse",
+      "linked_services": ["ReportingService"]
+    },
+    {
+      "asset_type": "http_listener",
+      "name": "HotelReservationAPI_Listener",
+      "description": "Main HTTP listener for Hotel Reservation API",
+      "api_name": "HotelReservationAPI",
+      "api_version": "1.0",
+      "host": "0.0.0.0",
+      "port": 8080,
+      "base_path": "/api",
+      "allowed_methods": ["GET", "POST", "PUT", "DELETE", "PATCH"],
+      "cors_enabled": true,
+      "authentication_required": true,
+      "linked_flow_services": [
+        "ReservationManagementService",
+        "RoomAvailabilityService",
+        "GuestProfileService",
+        "PaymentProcessingService",
+        "CheckInCheckOutService",
+        "ReportingService"
+      ]
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "CreateReservation_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "createReservation",
+      "http_method": "POST",
+      "path": "/reservations",
+      "linked_flow_name": "CreateReservation",
+      "input_document_type": "ReservationRequest",
+      "output_document_type": "ReservationResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "GetReservation_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "getReservation",
+      "http_method": "GET",
+      "path": "/reservations/{id}",
+      "linked_flow_name": "GetReservationById",
+      "input_document_type": "ReservationIdRequest",
+      "output_document_type": "ReservationResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "UpdateReservation_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "updateReservation",
+      "http_method": "PUT",
+      "path": "/reservations/{id}",
+      "linked_flow_name": "UpdateReservation",
+      "input_document_type": "ReservationUpdateRequest",
+      "output_document_type": "ReservationResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "CancelReservation_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "cancelReservation",
+      "http_method": "DELETE",
+      "path": "/reservations/{id}",
+      "linked_flow_name": "CancelReservation",
+      "input_document_type": "ReservationIdRequest",
+      "output_document_type": "CancellationResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "SearchRooms_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "searchAvailableRooms",
+      "http_method": "GET",
+      "path": "/rooms/available",
+      "linked_flow_name": "SearchAvailableRooms",
+      "input_document_type": "RoomSearchRequest",
+      "output_document_type": "RoomSearchResponse",
+      "requires_authentication": false
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "CreateGuest_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "createGuestProfile",
+      "http_method": "POST",
+      "path": "/guests",
+      "linked_flow_name": "CreateGuestProfile",
+      "input_document_type": "GuestProfileRequest",
+      "output_document_type": "GuestProfileResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "GetGuest_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "getGuestProfile",
+      "http_method": "GET",
+      "path": "/guests/{id}",
+      "linked_flow_name": "GetGuestProfile",
+      "input_document_type": "GuestIdRequest",
+      "output_document_type": "GuestProfileResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "UpdateGuest_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "updateGuestProfile",
+      "http_method": "PUT",
+      "path": "/guests/{id}",
+      "linked_flow_name": "UpdateGuestProfile",
+      "input_document_type": "GuestProfileUpdateRequest",
+      "output_document_type": "GuestProfileResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "ProcessPayment_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "processPayment",
+      "http_method": "POST",
+      "path": "/payments",
+      "linked_flow_name": "ProcessPayment",
+      "input_document_type": "PaymentRequest",
+      "output_document_type": "PaymentResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "RefundPayment_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "refundPayment",
+      "http_method": "POST",
+      "path": "/payments/refund",
+      "linked_flow_name": "RefundPayment",
+      "input_document_type": "RefundRequest",
+      "output_document_type": "RefundResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "CheckIn_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "checkInGuest",
+      "http_method": "POST",
+      "path": "/checkin",
+      "linked_flow_name": "CheckInGuest",
+      "input_document_type": "CheckInRequest",
+      "output_document_type": "CheckInResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "CheckOut_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "checkOutGuest",
+      "http_method": "POST",
+      "path": "/checkout",
+      "linked_flow_name": "CheckOutGuest",
+      "input_document_type": "CheckOutRequest",
+      "output_document_type": "CheckOutResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "ReservationReport_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "getReservationReport",
+      "http_method": "GET",
+      "path": "/reports/reservations",
+      "linked_flow_name": "GenerateReservationReport",
+      "input_document_type": "ReportRequest",
+      "output_document_type": "ReportResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "rest_endpoint",
+      "name": "RevenueReport_Endpoint",
+      "parent_api": "HotelReservationAPI",
+      "operation_name": "getRevenueReport",
+      "http_method": "GET",
+      "path": "/reports/revenue",
+      "linked_flow_name": "GenerateRevenueReport",
+      "input_document_type": "ReportRequest",
+      "output_document_type": "ReportResponse",
+      "requires_authentication": true
+    },
+    {
+      "asset_type": "document_type",
+      "name": "ReservationRequest",
+      "description": "Request document for creating reservation",
+      "fields": [
+        {"name": "guestId", "type": "String", "required": true},
+        {"name": "roomId", "type": "String", "required": true},
+        {"name": "checkInDate", "type": "Date", "required": true},
+        {"name": "checkOutDate", "type": "Date", "required": true},
+        {"name": "numberOfGuests", "type": "Integer", "required": true},
+        {"name": "specialRequests", "type": "String", "required": false}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "ReservationResponse",
+      "description": "Response document for reservation operations",
+      "fields": [
+        {"name": "reservationId", "type": "String", "required": true},
+        {"name": "confirmationNumber", "type": "String", "required": true},
+        {"name": "status", "type": "String", "required": true},
+        {"name": "totalAmount", "type": "Decimal", "required": true},
+        {"name": "createdAt", "type": "DateTime", "required": true}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "GuestProfileRequest",
+      "description": "Request document for guest profile",
+      "fields": [
+        {"name": "firstName", "type": "String", "required": true},
+        {"name": "lastName", "type": "String", "required": true},
+        {"name": "email", "type": "String", "required": true},
+        {"name": "phone", "type": "String", "required": true},
+        {"name": "address", "type": "Object", "required": false}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "GuestProfileResponse",
+      "description": "Response document for guest profile",
+      "fields": [
+        {"name": "guestId", "type": "String", "required": true},
+        {"name": "firstName", "type": "String", "required": true},
+        {"name": "lastName", "type": "String", "required": true},
+        {"name": "email", "type": "String", "required": true},
+        {"name": "loyaltyPoints", "type": "Integer", "required": true}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "PaymentRequest",
+      "description": "Request document for payment processing",
+      "fields": [
+        {"name": "reservationId", "type": "String", "required": true},
+        {"name": "amount", "type": "Decimal", "required": true},
+        {"name": "paymentMethod", "type": "String", "required": true},
+        {"name": "cardToken", "type": "String", "required": true}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "PaymentResponse",
+      "description": "Response document for payment operations",
+      "fields": [
+        {"name": "paymentId", "type": "String", "required": true},
+        {"name": "transactionId", "type": "String", "required": true},
+        {"name": "status", "type": "String", "required": true},
+        {"name": "amount", "type": "Decimal", "required": true},
+        {"name": "processedAt", "type": "DateTime", "required": true}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "RoomSearchRequest",
+      "description": "Request document for room search",
+      "fields": [
+        {"name": "checkInDate", "type": "Date", "required": true},
+        {"name": "checkOutDate", "type": "Date", "required": true},
+        {"name": "guests", "type": "Integer", "required": true},
+        {"name": "roomType", "type": "String", "required": false}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "RoomSearchResponse",
+      "description": "Response document for room search",
+      "fields": [
+        {"name": "rooms", "type": "Array", "required": true},
+        {"name": "totalResults", "type": "Integer", "required": true}
+      ]
+    },
+    {
+      "asset_type": "document_type",
+      "name": "ReportRequest",
+      "description": "Request document for reports",
+      "fields": [
+        {"name": "startDate", "type": "Date", "required": true},
+        {"name": "endDate", "type": "Date", "required": true},
+        {"name": "groupBy", "type": "String", "required": false}
+      ]
+    }
+  ]
+}
