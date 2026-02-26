@@ -12,8 +12,8 @@ export function Stage3ManifestPage() {
   const [selectedType, setSelectedType] = useState<string>('all');
 
   const assetsByType = manifest.assets.reduce((acc, asset) => {
-    if (!acc[asset.asset_type]) acc[asset.asset_type] = [];
-    acc[asset.asset_type].push(asset);
+    if (!acc[asset.type]) acc[asset.type] = [];
+    acc[asset.type].push(asset);
     return acc;
   }, {} as Record<string, typeof manifest.assets>);
 
@@ -54,31 +54,31 @@ export function Stage3ManifestPage() {
         <div className="grid gap-6 md:grid-cols-5">
           <MetricCard
             title="DB Connectors"
-            value={manifest.summary.db_connectors}
+            value={manifest.assets.filter((a) => a.type === 'db_connector').length}
             icon={Database}
             color="blue"
           />
           <MetricCard
             title="Integration Flows"
-            value={manifest.summary.integration_flows}
+            value={manifest.assets.filter((a) => a.type === 'integration_flow').length}
             icon={Workflow}
             color="green"
           />
           <MetricCard
             title="HTTP Listeners"
-            value={manifest.summary.http_listeners}
+            value={manifest.assets.filter((a) => a.type === 'http_listener').length}
             icon={Globe}
             color="yellow"
           />
           <MetricCard
             title="REST Endpoints"
-            value={manifest.summary.rest_endpoints}
+            value={manifest.assets.filter((a) => a.type === 'rest_endpoint').length}
             icon={FileType}
             color="red"
           />
           <MetricCard
             title="Document Types"
-            value={manifest.summary.document_types}
+            value={manifest.assets.filter((a) => a.type === 'document_type').length}
             icon={FileType}
             color="gray"
           />
@@ -126,7 +126,7 @@ export function Stage3ManifestPage() {
                       <div className="flex items-center gap-3">
                         <h4 className="font-semibold text-gray-900">{asset.name}</h4>
                         <span className="px-2 py-1 rounded bg-gray-100 text-gray-700 text-xs font-medium">
-                          {asset.asset_type}
+                          {asset.type}
                         </span>
                         {hasWarning && (
                           <span className="px-2 py-1 rounded bg-yellow-100 text-yellow-700 text-xs font-medium flex items-center gap-1">
@@ -142,7 +142,7 @@ export function Stage3ManifestPage() {
                         {Object.entries(asset as Record<string, unknown>)
                           .filter(
                             ([key, value]) =>
-                              !['asset_type', 'name', 'description'].includes(key) &&
+                              !['type', 'name', 'description'].includes(key) &&
                               typeof value !== 'object'
                           )
                           .slice(0, 6)
